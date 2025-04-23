@@ -16,7 +16,7 @@ Oryx is a lightweight, opinionated, and modular TypeScript-based backend framewo
 ## 🏁 Getting Started
 
 ```bash
-git clone https://github.com/yourname/oryx-app.git
+git clone https://github.com/oryx-js/framework.git ./
 cd oryx-app
 npm install
 npm run dev

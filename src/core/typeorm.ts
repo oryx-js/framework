@@ -5,6 +5,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import Common from '@core/common';
 import DBConfig from '@app/config/database';
 import { TypeOrmDialect } from '@type/core.typeorm';
+import runSeeders from '@app/database/seeders/register';
 
 class Database {
     private static _instance: DataSource;
@@ -55,6 +56,14 @@ class Database {
                 'DATABASE',
                 `Database type is: ${this.dbType}`,
             );
+            setTimeout(async () => {
+                try {
+                    await runSeeders();
+                } catch (seederError) {
+                    Common.logger('error', 'DATABASE', `Failed to runing seeder: ${seederError}`);
+                    process.exit();
+                }
+            }, 100);
         } catch (err) {
             Common.logger('error', 'DATABASE', `Failed to connect: ${err}`);
             throw err;

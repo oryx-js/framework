@@ -1,7 +1,7 @@
 {
     "name": "oryx",
     "version": "1.0.0",
-    "description": "Oryx.js - A lightweight TypeScript backend framework with modular structure.",
+    "description": "Oryx is a lightweight, opinionated, and modular TypeScript-based backend framework built on top of Express.js. It aims to provide a clean architecture, fast setup, and extendability—ideal for both rapid development and large-scale applications.",
     "keywords": [
         "oryx",
         "typescript",

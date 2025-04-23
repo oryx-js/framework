@@ -10,9 +10,7 @@ Siap, bro! Kita ubah jadi bilingual (Bahasa Indonesia + English) biar makin kece
 | Socket.io             | Real-time communication protocol                          | Protokol komunikasi real-time                    |
 | TypeORM               | ORM, Query builder, Seeder, BaseRepo, Pagination          | ORM + Query + Seeder + BaseRepo + Pagination    |
 | class-validator       | DTO validation                                             | Validasi DTO                                    |
-| Winston Logger        | Custom logging with levels and tags                       | Logging custom + tagging                        |
 | Helper                | Utilities like Date, Object, Common functions             | Fungsi utilitas umum                            |
-| Lifecycle Hooks       | Hooks like beforeSystem, afterSystem, shutdownSystem      | Hook untuk PRE, POST, dan SHUTDOWN sistem       |
 
 ---
 
@@ -23,6 +21,8 @@ Siap, bro! Kita ubah jadi bilingual (Bahasa Indonesia + English) biar makin kece
 | **Dependency Injection** | Use library (Inversify, tsyringe) or custom lightweight version          | Gunakan library atau buatan sendiri yang ringan & fleksibel          |
 | **Testing Support**     | Unit and integration tests with `jest` + `supertest`                      | Testing unit & integrasi (bisa mulai dengan Jest + Supertest)        |
 | **File Maker**          | CLI to auto-generate files like `make controller User` from templates     | CLI untuk generate file otomatis dari template                       |
+| **Winston Logger**        | Custom logging with levels and tags                       | Logging custom + tagging                        |
+| **Lifecycle Hooks**       | Hooks like beforeSystem, afterSystem, shutdownSystem      | Hook untuk PRE, POST, dan SHUTDOWN sistem       |
 
 ---
 

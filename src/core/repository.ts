@@ -17,9 +17,12 @@ export default function CoreRepository<T extends ObjectLiteral>(
     entityClass: new () => T,
 ) {
     return class {
-        static entity: Repository<T> = Database.instance.getRepository(entityClass);
+        static entity: Repository<T> =
+            Database.instance.getRepository(entityClass);
 
-        static async pagination(params: PaginateParams<T>): Promise<PaginateResult<T>> {
+        static async pagination(
+            params: PaginateParams<T>,
+        ): Promise<PaginateResult<T>> {
             return await Paginate.make(this.entity, params);
         }
 
@@ -42,7 +45,10 @@ export default function CoreRepository<T extends ObjectLiteral>(
                 return this.entity.find({ where: whereList as any, relations });
             }
 
-            if (typeof index === 'string' && (isString(value) || isNumber(value))) {
+            if (
+                typeof index === 'string' &&
+                (isString(value) || isNumber(value))
+            ) {
                 return this.entity.find({
                     where: { [index]: Like(`%${value}%`) } as any,
                     relations,
@@ -62,20 +68,24 @@ export default function CoreRepository<T extends ObjectLiteral>(
             criteria: number | FindOptionsWhere<T>,
         ): Promise<T | null> {
             const where: FindOptionsWhere<T> =
-                typeof criteria === 'number' ? ({ id: criteria } as any) : criteria;
-        
+                typeof criteria === 'number'
+                    ? ({ id: criteria } as any)
+                    : criteria;
+
             const existing = await this.entity.findOne({ where });
             if (!existing) return null;
-        
+
             const merged = this.entity.merge(existing, data);
             return this.entity.save(merged);
-        }        
+        }
 
         static async delete(
             criteria: number | FindOptionsWhere<T>,
         ): Promise<boolean> {
             const where: FindOptionsWhere<T> =
-                typeof criteria === 'number' ? ({ id: criteria } as any) : criteria;
+                typeof criteria === 'number'
+                    ? ({ id: criteria } as any)
+                    : criteria;
 
             const result = await this.entity.delete(where);
             return result.affected !== 0;

@@ -13,32 +13,29 @@ class Common {
         return (value !== undefined ? (value as unknown as T) : defaultValue!)!;
     }
 
-    static logger(
-        level: LoggerLevels,
-        label: string,
-        message: any
-    ) {
+    static logger(level: LoggerLevels, label: string, message: any) {
         const timestamp = new Date().toISOString();
-        const emoji = {
-            log: '📘',
-            info: 'ℹ️',
-            warn: '⚠️',
-            error: '❌',
-        }[level] || '📘';
-    
+        const emoji =
+            {
+                log: '📘',
+                info: 'ℹ️',
+                warn: '⚠️',
+                error: '❌',
+            }[level] || '📘';
+
         const tag = `[${timestamp}] ${emoji} [${label}]`;
         if (typeof message === 'string') {
             console[level]?.(`${tag} ${message}`);
         } else {
             console[level]?.(tag, message);
         }
-    }    
+    }
 
     static baseUrl(segment: string = ''): string {
-        const baseUrl = this.env<string>('APP_URL', 'http://localhost:3000').replace(
-            /\/+$/,
-            '',
-        );
+        const baseUrl = this.env<string>(
+            'APP_URL',
+            'http://localhost:3000',
+        ).replace(/\/+$/, '');
         return `${baseUrl}${segment ? `/${segment.replace(/^\/+/, '')}` : ''}`;
     }
 
@@ -110,7 +107,11 @@ class Common {
         const entityName = entity.name.replace(/(Entity|entity)$/i, '');
 
         if (!data.length) {
-            this.logger('warn', 'SEEDER', `No data provided for ${entityName}, seeding skipped`);
+            this.logger(
+                'warn',
+                'SEEDER',
+                `No data provided for ${entityName}, seeding skipped`,
+            );
             return;
         }
 
@@ -124,7 +125,11 @@ class Common {
             .orUpdate(allColumns, allColumns)
             .execute();
 
-        this.logger('log', 'SEEDER', `Seeder for '${entityName}' executed successfully. Records created/updated.`);
+        this.logger(
+            'log',
+            'SEEDER',
+            `Seeder for '${entityName}' executed successfully. Records created/updated.`,
+        );
     }
 
     public static md5(input: string): string {

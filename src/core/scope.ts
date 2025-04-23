@@ -39,49 +39,53 @@ console.warn = (...args: any[]) => {
  *  ======================= */
 process.on('unhandledRejection', (reason, promise) => {
     if (isDev()) {
-        Common.logger('error', 'SCOPE', `Unhandled Rejection: ${reason}`)
+        Common.logger('error', 'SCOPE', `Unhandled Rejection: ${reason}`);
     }
 });
 
 process.on('uncaughtException', (error: Error) => {
     if (isDev()) {
-        Common.logger('error', 'SCOPE', `Unhandled Exception: ${error}`)
+        Common.logger('error', 'SCOPE', `Unhandled Exception: ${error}`);
     }
     process.exit(1);
 });
 
 process.on('warning', (warning) => {
     if (isDev()) {
-        Common.logger('warn', 'SCOPE', `Process Warning: ${warning}`)
+        Common.logger('warn', 'SCOPE', `Process Warning: ${warning}`);
     }
 });
 
 process.on('multipleResolves', (type, promise, reason) => {
     if (isDev()) {
-        Common.logger('error', 'SCOPE', `Multiple Resolves: \nType: ${type}\nReason: ${reason}`)
+        Common.logger(
+            'error',
+            'SCOPE',
+            `Multiple Resolves: \nType: ${type}\nReason: ${reason}`,
+        );
     }
 });
 
 process.on('rejectionHandled', (promise) => {
     if (isDev()) {
-        Common.logger('error', 'SCOPE', `Rejection Handled Late: ${promise}`)
+        Common.logger('error', 'SCOPE', `Rejection Handled Late: ${promise}`);
     }
 });
 
 process.on('SIGINT', () => {
-    Common.logger('log', 'SCOPE', `Process terminated (SIGINT)`)
+    Common.logger('log', 'SCOPE', `Process terminated (SIGINT)`);
     process.exit(0);
 });
 
 process.on('SIGTERM', () => {
-    Common.logger('log', 'SCOPE', `Process terminated (SIGTERM)`)
+    Common.logger('log', 'SCOPE', `Process terminated (SIGTERM)`);
     process.exit(0);
 });
 
 process.on('beforeExit', (code) => {
-    Common.logger('log', 'SCOPE', `Process before exit with code: ${code}`)
+    Common.logger('log', 'SCOPE', `Process before exit with code: ${code}`);
 });
 
 process.on('exit', (code) => {
-    Common.logger('log', 'SCOPE', `Process exited with code: ${code}`)
+    Common.logger('log', 'SCOPE', `Process exited with code: ${code}`);
 });

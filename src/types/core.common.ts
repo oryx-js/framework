@@ -3,4 +3,4 @@ export type RunSeederType<T> = {
     data: Partial<T>[];
 };
 
-export type LoggerLevels = 'log' | 'warn' | 'error' | 'info'
+export type LoggerLevels = 'log' | 'warn' | 'error' | 'info';

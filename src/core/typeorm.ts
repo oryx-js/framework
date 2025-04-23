@@ -23,7 +23,11 @@ class Database {
         this.dbType = Common.env<TypeOrmDialect>('DB_TYPE', 'mysql');
 
         if (!DBConfig[this.dbType]) {
-            Common.logger('error', 'DATABASE', `Unsupported DB_TYPE: '${this.dbType}'`)
+            Common.logger(
+                'error',
+                'DATABASE',
+                `Unsupported DB_TYPE: '${this.dbType}'`,
+            );
             process.exit(1);
         }
 
@@ -36,7 +40,7 @@ class Database {
 
     public static async init(): Promise<void> {
         if (this._instance?.isInitialized) {
-            Common.logger('log', 'DATABASE', `Already initialized`)
+            Common.logger('log', 'DATABASE', `Already initialized`);
             return;
         }
 
@@ -45,10 +49,14 @@ class Database {
 
         try {
             await this._instance.initialize();
-            Common.logger('log', 'DATABASE', `Database connected successfully`)
-            Common.logger('log', 'DATABASE', `Database type is: ${this.dbType}`)
+            Common.logger('log', 'DATABASE', `Database connected successfully`);
+            Common.logger(
+                'log',
+                'DATABASE',
+                `Database type is: ${this.dbType}`,
+            );
         } catch (err) {
-            Common.logger('error', 'DATABASE', `Failed to connect: ${err}`)
+            Common.logger('error', 'DATABASE', `Failed to connect: ${err}`);
             throw err;
         }
     }

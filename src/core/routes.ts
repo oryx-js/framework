@@ -109,44 +109,66 @@ class Routes {
     static async apply(router: Router) {
         for (const route of this.routes) {
             let handlerFunction: RouteHandler | undefined;
-    
+
             if (typeof route.handler === 'function') {
                 handlerFunction = route.handler;
-            } 
-
-            else if (Array.isArray(route.handler) && route.handler.length === 2) {
+            } else if (
+                Array.isArray(route.handler) &&
+                route.handler.length === 2
+            ) {
                 const [Controller, method] = route.handler;
                 if (typeof Controller[method] !== 'function') {
-                    Common.logger('error', 'ROUTES', `Method ${method} not found in controller ${Controller.name}`)
+                    Common.logger(
+                        'error',
+                        'ROUTES',
+                        `Method ${method} not found in controller ${Controller.name}`,
+                    );
                 }
                 handlerFunction = Controller[method].bind(Controller);
             } else {
-                Common.logger('error', 'ROUTES', `Invalid handler format for route: ${route.path}`)
+                Common.logger(
+                    'error',
+                    'ROUTES',
+                    `Invalid handler format for route: ${route.path}`,
+                );
             }
-    
+
             if (handlerFunction) {
                 for (const method of route.methods) {
                     router[method](
                         route.path,
                         ...(route.middlewares || []),
-                        async (req: Request, res: Response, next: NextFunction) => {
+                        async (
+                            req: Request,
+                            res: Response,
+                            next: NextFunction,
+                        ) => {
                             try {
                                 const routeHttpHandler: HttpContext = {
                                     req,
                                     res,
                                     next,
                                 };
-    
+
                                 if (typeof handlerFunction === 'function') {
-                                    const result = handlerFunction(routeHttpHandler);
+                                    const result =
+                                        handlerFunction(routeHttpHandler);
                                     if (result instanceof Promise) {
                                         await result;
                                     }
                                 } else {
-                                    Common.logger('error', 'ROUTES', `Handler is not a function for route: ${route.path}`)
+                                    Common.logger(
+                                        'error',
+                                        'ROUTES',
+                                        `Handler is not a function for route: ${route.path}`,
+                                    );
                                 }
                             } catch (error: any) {
-                                Common.logger('error', 'ROUTES', `Error in route ${method.toUpperCase()} ${route.path}: ${error.message}`)
+                                Common.logger(
+                                    'error',
+                                    'ROUTES',
+                                    `Error in route ${method.toUpperCase()} ${route.path}: ${error.message}`,
+                                );
                                 next(error);
                             }
                         },
@@ -154,7 +176,7 @@ class Routes {
                 }
             }
         }
-    }    
+    }
 }
 
 export default Routes;

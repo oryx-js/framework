@@ -1,6 +1,6 @@
 /**
  * register routes
  */
-import '@app/routes/web'
+import '@app/routes/web';
 
 export {};

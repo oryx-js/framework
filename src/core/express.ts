@@ -19,9 +19,12 @@ class CoreExpress {
         this.express.use(express.json());
         this.express.use(express.urlencoded({ extended: true }));
         this.express.use(cookieParser());
-        this.express.set('/static', express.static(path.join(__dirname, '../../public/static')))
+        this.express.set(
+            '/static',
+            express.static(path.join(__dirname, '../../public/static')),
+        );
         this.express.set('views engine', 'ejs');
-        this.express.set('views', path.join(__dirname, '../../public/views'))
+        this.express.set('views', path.join(__dirname, '../../public/views'));
         await import('@app/http/middlewares/register');
     }
 

@@ -17,7 +17,11 @@ class CoreServer {
 
     public static start() {
         this.server.listen(this.serverPort, () => {
-            Common.logger('log', 'SERVER', `Server is already running : ${this.serverUrl}`)
+            Common.logger(
+                'log',
+                'SERVER',
+                `Server is already running : ${this.serverUrl}`,
+            );
         });
     }
 }

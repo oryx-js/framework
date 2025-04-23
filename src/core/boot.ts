@@ -14,7 +14,11 @@ class CoreBoot {
                 CoreServer.start();
             })
             .catch((error: any) => {
-                Common.logger('error', 'BOOT', `Failed to initialize application: ${error}`)
+                Common.logger(
+                    'error',
+                    'BOOT',
+                    `Failed to initialize application: ${error}`,
+                );
                 process.exit(1);
             });
     }

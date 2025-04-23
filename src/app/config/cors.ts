@@ -1,7 +1,7 @@
 /**
  * packages
  */
-import Common from "@core/common";
+import Common from '@core/common';
 
 const CorsConfig = {
     socket: {

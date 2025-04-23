@@ -1,18 +1,15 @@
 {
-    "name": "warf",
+    "name": "oryx",
     "version": "1.0.0",
-    "description": "WARF (WhatsApp API Relay Framework) - REST API gateway and web GUI for WhatsApp automation and message management",
+    "description": "Oryx.js - A lightweight TypeScript backend framework with modular structure.",
     "keywords": [
-        "whatsapp",
-        "api",
-        "gateway",
+        "oryx",
+        "typescript",
+        "backend",
         "framework",
-        "message",
-        "chatbot",
-        "warf",
-        "whatsapp-gateway",
-        "whatsapp-api",
-        "whatsapp-automation"
+        "express",
+        "routing",
+        "nodejs"
     ],
     "homepage": "https://github.com/refkinscallv/warf-be#readme",
     "bugs": {

@@ -1,3 +1,6 @@
+/**
+ * packages
+ */
 import Common from '@core/common';
 
 const DatabaseConfig = {

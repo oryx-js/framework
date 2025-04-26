@@ -71,7 +71,7 @@ class Common {
         return { status, code, message, result, ...custom };
     }
 
-    public static resJson(
+    static resJson(
         res: Response,
         arg1:
             | boolean
@@ -101,7 +101,29 @@ class Common {
         return res.status(response.code).json(response);
     }
 
-    public static async executeSeed<T>({ entity, data }: RunSeederType<T>) {
+    static resView(
+        res: Response,
+        viewName: string,
+        locals: object = {},
+        status: number = 200,
+    ): Response {
+        const data = {
+            locals,
+            ...locals,
+        };
+
+        return res.status(status).render(viewName, data) as unknown as Response;
+    }
+
+    static resRedirect(
+        res: Response,
+        url: string,
+        statusCode: number = 302,
+    ): Response {
+        return res.redirect(statusCode, url) as unknown as Response;
+    }
+
+    static async executeSeed<T>({ entity, data }: RunSeederType<T>) {
         const Database = (await import('@core/typeorm')).default;
         const repository = Database.instance.getRepository(entity);
         const entityName = entity.name.replace(/(Entity|entity)$/i, '');
@@ -132,11 +154,11 @@ class Common {
         );
     }
 
-    public static md5(input: string): string {
+    static md5(input: string): string {
         return createHash('md5').update(input).digest('hex');
     }
 
-    public static randomAlphaNumeric(length: number): string {
+    static randomAlphaNumeric(length: number): string {
         const chars =
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const bytes = randomBytes(length);

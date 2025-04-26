@@ -60,7 +60,11 @@ class Database {
                 try {
                     await runSeeders();
                 } catch (seederError) {
-                    Common.logger('error', 'DATABASE', `Failed to runing seeder: ${seederError}`);
+                    Common.logger(
+                        'error',
+                        'DATABASE',
+                        `Failed to runing seeder: ${seederError}`,
+                    );
                     process.exit();
                 }
             }, 100);

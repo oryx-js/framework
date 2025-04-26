@@ -156,12 +156,6 @@ class Routes {
                                     if (result instanceof Promise) {
                                         await result;
                                     }
-                                } else {
-                                    Common.logger(
-                                        'error',
-                                        'ROUTES',
-                                        `Handler is not a function for route: ${route.path}`,
-                                    );
                                 }
                             } catch (error: any) {
                                 Common.logger(

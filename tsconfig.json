@@ -22,7 +22,8 @@
             "@core/*": ["core/*"],
             "@app/*": ["app/*"],
             "@type/*": ["types/*"],
-        }
+        },
+        "typeRoots": ["./src/types", "./node_modules/@types"],
     },
     "include": ["src"],
     "exclude": ["node_modules", "dist", "logs", "public"]

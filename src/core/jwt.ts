@@ -1,18 +1,25 @@
 /**
  * packages
  */
-import jwt, { 
-    SignOptions, 
-    JwtPayload 
-} from 'jsonwebtoken';
+import jwt, { SignOptions, JwtPayload } from 'jsonwebtoken';
 import Common from '@core/common';
 
 class JWT {
-    private static secretKey: string = Common.env<string>('JWT_SECRET_KEY') || (() => { throw new Error('JWT_SECRET_KEY is not defined'); })();
+    private static secretKey: string =
+        Common.env<string>('JWT_SECRET_KEY') ||
+        (() => {
+            throw new Error('JWT_SECRET_KEY is not defined');
+        })();
 
-    private static expireIn: number = Common.env<number>('JWT_EXPIRE_IN', 86400);
+    private static expireIn: number = Common.env<number>(
+        'JWT_EXPIRE_IN',
+        86400,
+    );
 
-    static sign<T extends JwtPayload>(payload: T, options: SignOptions = {}): string {
+    static sign<T extends JwtPayload>(
+        payload: T,
+        options: SignOptions = {},
+    ): string {
         return jwt.sign(payload, this.secretKey, {
             expiresIn: this.expireIn,
             ...options,

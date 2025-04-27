@@ -1,7 +1,3 @@
-Siap, bro! Kita ubah jadi bilingual (Bahasa Indonesia + English) biar makin kece dan bisa dibaca tim dev global kalau butuh 😎🌍
-
----
-
 ### ✅ Already Solid (`[C]`) | Sudah Mantap:
 
 | Feature               | Description (EN)                                           | Keterangan (ID)                                 |
@@ -57,8 +53,3 @@ Kalau mau hemat waktu, fokus dulu ke 3 hal ini, karena semuanya saling mendukung
 3. 🧪 **Testing Support**  
    → (EN) Add tests from the start, keep code reliable.  
    → (ID) Testing sejak awal bikin sistem lebih tahan banting.
-
----
-
-Let me know, mau mulai dari mana dulu?  
-Want me to start building the custom Dependency Injection first? Or maybe the File Maker CLI?

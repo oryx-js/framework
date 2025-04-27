@@ -1,4 +1,5 @@
 /**
+/**
  * packages
  */
 import express, { Express, Router } from 'express';
@@ -7,6 +8,8 @@ import Routes from '@core/routes';
 import ExpressConfig from '@app/config/express';
 import multer from 'multer';
 import Cookie from '@core/cookie';
+import ejs from 'ejs';
+import RegisterMiddlewares from '@app/http/middlewares/register';
 
 class CoreExpress {
     public static express: Express = express();
@@ -25,7 +28,8 @@ class CoreExpress {
             Cookie.init(req, res);
             next();
         });
-        this.express.set(ExpressConfig.static.route, ExpressConfig.static.path);
+        this.express.use(ExpressConfig.static.route, express.static(ExpressConfig.static.path));
+        ejs.delimiter = "?";
         this.express.set('view engine', ExpressConfig.view.engine);
         this.express.set('views', ExpressConfig.view.path);
         this.express.use((req, res, next) => {
@@ -36,7 +40,7 @@ class CoreExpress {
             });
             next();
         });
-        await import('@app/http/middlewares/register');
+        RegisterMiddlewares.set(this.express)
     }
 
     private static async routes() {

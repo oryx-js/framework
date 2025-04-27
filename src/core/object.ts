@@ -95,4 +95,19 @@ export default class CoreObject {
             )
             .join('&');
     }
+
+    /**
+     * Check if an object contains all required keys
+     * @returns true if all keys exist and not undefined/null, false otherwise
+     */
+    static requireKeys<T extends object>(obj: T, keys: string[] | string): boolean {
+        if (!obj || typeof obj !== 'object') return false;
+        const required = isArray(keys) ? keys : [keys];
+        for (const key of required) {
+            if (!(key in obj) || obj[key as keyof T] === undefined || obj[key as keyof T] === null) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

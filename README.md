@@ -1,4 +1,3 @@
-
 # Oryx
 
 Oryx is a lightweight, opinionated, and modular TypeScript-based backend framework built on top of Express.js. It aims to provide a clean architecture, fast setup, and extendability—ideal for both rapid development and large-scale applications.
@@ -11,13 +10,13 @@ Oryx is a lightweight, opinionated, and modular TypeScript-based backend framewo
 | **Socket.io**   | Real-time communication protocol                        | Protokol komunikasi real-time                         |
 | **TypeORM**     | ORM, Query builder, Seeder, BaseRepo, Pagination        | ORM + Query + Seeder + BaseRepo + Pagination          |
 | **class-validator** | DTO validation                                  | Validasi DTO                                           |
-| **Helper**      | Utilities like Date, Object, Common functions           | Fungsi utilitas umum (Date, Object, Common, dll.)     |
+| **Helper**      | Utilities like Date, Object, JWT, Common, Cookie functions           | Fungsi utilitas umum (Date, Object, JWT, Common, Cookie dll.)     |
+| **Template Engine** | Ejs
 
 ## 🏁 Getting Started
 
 ```bash
 git clone https://github.com/oryx-js/framework.git ./
-cd oryx-app
 npm install
 npm run dev
 ```
@@ -26,19 +25,30 @@ npm run dev
 
 ```
 src/
+|
 ├── app/
 │   ├── config/
+|   |   ├── cors.ts
+|   |   ├── database.ts
+|   |   └── express.ts
 │   ├── database/
 │   │   ├── entities/
 │   │   ├── repositories/
 │   │   └── seeders/
+|   |       └── register.ts
 │   ├── http/
 │   │   ├── controllers/
 │   │   ├── middlewares/
+|   |   |   └── register.ts
 │   │   └── validators/
+|   |       └── dto/
 │   ├── routes/
+|   |   ├── web.ts
+|   |   └── register.ts
 │   └── services/
+|
 ├── core/           # Core engine of the framework
+|
 └── types/          # Type declarations
 ```
 
@@ -53,8 +63,7 @@ src/
 - Dependency Injection container
 - Lifecycle hooks (`beforeSystem`, `afterSystem`, `shutdownSystem`)
 - CLI generator (`oryx make:*`)
-- E2EE-ready Chat system
-- Adapter layer for alternative drivers (Fastify, Hapi, etc.)
+- ETC.
 
 ## 📖 License
 

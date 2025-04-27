@@ -9,6 +9,7 @@ import { CookieOptions } from '@type/core.cookie';
 export default class Cookie {
     private static req: Request;
     private static res: Response;
+    private static cache: Record<string, any> | null = null;
     private static readonly cookieName = Common.env<string>(
         'COOKIE_NAME',
         'warf_token',
@@ -21,6 +22,7 @@ export default class Cookie {
     static init(req: Request, res: Response) {
         this.req = req;
         this.res = res;
+        this.cache = null;
     }
 
     static all<T = Record<string, any>>(): T | null {
@@ -56,7 +58,9 @@ export default class Cookie {
         if (typeof key === 'string' && value !== undefined) {
             current[key] = value;
         } else if (typeof key === 'object') {
-            Object.assign(current, key);
+            Object.entries(key).forEach(([k, v]) => {
+                current[k] = v;
+            });
         }
 
         return this.#writeCookie(current, options);
@@ -70,10 +74,21 @@ export default class Cookie {
 
         const current = this.#readCookie() || {};
 
+        // Remove the keys from the cookie object
         if (Array.isArray(keys)) {
-            keys.forEach((key) => delete current[key]);
+            keys.forEach((key) => {
+                delete current[key];
+                // Remove from cache for immediate effect
+                if (this.cache) {
+                    delete this.cache[key];
+                }
+            });
         } else {
             delete current[keys];
+            // Remove from cache for immediate effect
+            if (this.cache) {
+                delete this.cache[keys];
+            }
         }
 
         return this.#writeCookie(current, options);
@@ -82,15 +97,20 @@ export default class Cookie {
     static clear(): boolean {
         if (!this.res) return false;
         this.res.clearCookie(this.cookieName);
+        this.cache = null;
         return true;
     }
 
     static #readCookie(): Record<string, any> | null {
+        if (this.cache) return this.cache;
+
         try {
             const enc = this.req.cookies?.[this.cookieName];
             if (!enc) return null;
             const dec = this.#decrypt(enc);
-            return JSON.parse(dec);
+            const parsed = JSON.parse(dec);
+            this.cache = parsed;
+            return parsed;
         } catch {
             return null;
         }
@@ -112,6 +132,7 @@ export default class Cookie {
             };
 
             this.res.cookie(this.cookieName, enc, config);
+            this.cache = data;
             return true;
         } catch {
             return false;

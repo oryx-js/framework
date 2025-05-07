@@ -1,7 +1,7 @@
 /**
  * register middlewares
  */
-import { Express } from 'express'
+import { Express } from 'express';
 export default class RegisterMiddlewares {
     public static set(express: Express) {
         // express.use(YourMiddleware.handle)

@@ -11,8 +11,8 @@ export default class Paginate {
     ): Promise<PaginateResult<T>> {
         const page = Number(params.page ?? 1);
         const limit = Number(params.limit ?? 10);
-        const filter = params.filter;
         const offset = (page - 1) * limit;
+        const filter = params.filter;
         const relations =
             params.with
                 ?.split(',')
@@ -22,21 +22,22 @@ export default class Paginate {
         let queryBuilder: SelectQueryBuilder<T> =
             repo.createQueryBuilder('entity');
 
-        if (relations) {
-            relations.forEach((relation) => {
-                queryBuilder = queryBuilder.leftJoinAndSelect(
-                    `entity.${relation}`,
-                    relation,
-                );
-            });
+        for (const relation of relations) {
+            queryBuilder = queryBuilder.leftJoinAndSelect(
+                `entity.${relation}`,
+                relation,
+            );
         }
 
         if (filter) {
-            Object.entries(filter).forEach(([key, value]) => {
+            Object.entries(filter).forEach(([key, value], i) => {
+                const paramKey = `filter_${i}`;
+                const aliasPath = key.includes('.') ? key : `entity.${key}`;
+
                 queryBuilder = queryBuilder.andWhere(
-                    `entity.${key} LIKE :${key}`,
+                    `${aliasPath} LIKE :${paramKey}`,
                     {
-                        [key]: `%${value}%`,
+                        [paramKey]: `%${value}%`,
                     },
                 );
             });
@@ -51,7 +52,7 @@ export default class Paginate {
             total,
             max_page: Math.ceil(total / limit),
             data,
-            filter: filter,
+            filter,
         };
     }
 }

@@ -28,8 +28,11 @@ class CoreExpress {
             Cookie.init(req, res);
             next();
         });
-        this.express.use(ExpressConfig.static.route, express.static(ExpressConfig.static.path));
-        ejs.delimiter = "?";
+        this.express.use(
+            ExpressConfig.static.route,
+            express.static(ExpressConfig.static.path),
+        );
+        ejs.delimiter = '?';
         this.express.set('view engine', ExpressConfig.view.engine);
         this.express.set('views', ExpressConfig.view.path);
         this.express.use((req, res, next) => {
@@ -40,7 +43,7 @@ class CoreExpress {
             });
             next();
         });
-        RegisterMiddlewares.set(this.express)
+        RegisterMiddlewares.set(this.express);
     }
 
     private static async routes() {

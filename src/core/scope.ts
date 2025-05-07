@@ -56,16 +56,6 @@ process.on('warning', (warning) => {
     }
 });
 
-process.on('multipleResolves', (type, promise, reason) => {
-    if (isDev()) {
-        Common.logger(
-            'error',
-            'SCOPE',
-            `Multiple Resolves: \nType: ${type}\nReason: ${reason}`,
-        );
-    }
-});
-
 process.on('rejectionHandled', (promise) => {
     if (isDev()) {
         Common.logger('error', 'SCOPE', `Rejection Handled Late: ${promise}`);

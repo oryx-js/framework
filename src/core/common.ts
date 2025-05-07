@@ -6,6 +6,7 @@ import 'dotenv/config';
 import { createHash, randomBytes } from 'crypto';
 import { Response } from 'express';
 import { LoggerLevels, RunSeederType } from '@type/core.common';
+import path from 'path';
 
 class Common {
     static env<T>(key: string, defaultValue: any = null): T {
@@ -108,11 +109,16 @@ class Common {
         status: number = 200,
     ): Response {
         const data = {
-            locals,
             ...locals,
+            Common,
         };
 
-        return res.status(status).render(viewName, data) as unknown as Response;
+        return res
+            .status(status)
+            .render(
+                path.join(__dirname, `../../public/views/${viewName}`),
+                data,
+            ) as unknown as Response;
     }
 
     static resRedirect(

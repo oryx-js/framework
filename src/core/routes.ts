@@ -15,6 +15,7 @@ class Routes {
     private static routes: RouteDefinition[] = [];
     private static prefix = '';
     private static groupMiddlewares: RouteMiddleware[] = [];
+    private static globalMiddlewares: RouteMiddleware[] = [];
 
     static add(
         methods: RouteMethod | RouteMethod[],
@@ -29,7 +30,11 @@ class Routes {
             methods: methodArray,
             path: fullPath,
             handler,
-            middlewares: [...this.groupMiddlewares, ...middlewares],
+            middlewares: [
+                ...this.globalMiddlewares,
+                ...this.groupMiddlewares,
+                ...middlewares,
+            ],
         });
     }
 
@@ -106,6 +111,16 @@ class Routes {
         this.groupMiddlewares = previousMiddlewares;
     }
 
+    static middleware(middlewares: RouteMiddleware[], callback: () => void) {
+        const previousMiddlewares = this.globalMiddlewares;
+
+        this.globalMiddlewares = [...previousMiddlewares, ...middlewares];
+
+        callback();
+
+        this.globalMiddlewares = previousMiddlewares;
+    }
+
     static async apply(router: Router) {
         for (const route of this.routes) {
             let handlerFunction: RouteHandler | undefined;
@@ -135,6 +150,25 @@ class Routes {
 
             if (handlerFunction) {
                 for (const method of route.methods) {
+                    if (
+                        ![
+                            'get',
+                            'post',
+                            'put',
+                            'delete',
+                            'patch',
+                            'options',
+                            'head',
+                        ].includes(method)
+                    ) {
+                        Common.logger(
+                            'error',
+                            'ROUTES',
+                            `Invalid HTTP method: ${method} for route: ${route.path}`,
+                        );
+                        continue;
+                    }
+
                     router[method](
                         route.path,
                         ...(route.middlewares || []),

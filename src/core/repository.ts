@@ -8,6 +8,7 @@ import {
     DeepPartial,
     Like,
     ObjectLiteral,
+    In,
 } from 'typeorm';
 import { isObject, isString, isNumber } from 'lodash';
 import { PaginateParams, PaginateResult } from '@type/core.paginate';
@@ -17,8 +18,9 @@ export default function CoreRepository<T extends ObjectLiteral>(
     entityClass: new () => T,
 ) {
     return class {
-        static entity: Repository<T> =
-            Database.instance.getRepository(entityClass);
+        static get entity(): Repository<T> {
+            return Database.instance.getRepository(entityClass);
+        }
 
         /** Pagination with optional search/filter */
         static async pagination(
@@ -33,31 +35,48 @@ export default function CoreRepository<T extends ObjectLiteral>(
         }
 
         /** Flexible search by key-value or object */
+        /** Flexible search by key-value or object (LIKE or IN if array) */
         static async by(
-            index: string | number | Record<string, any>,
-            value?: string | number | null,
+            index: string | number | Record<string, any> | string[],
+            value?: string | number | string[] | null,
             relations: string[] = [],
         ): Promise<T[]> {
+            if (Array.isArray(index)) {
+                const where = index.reduce((acc, key) => {
+                    if (Array.isArray(value)) {
+                        acc[key] = In(value);
+                    } else if (isString(value) || isNumber(value)) {
+                        acc[key] = Like(`%${value}%`);
+                    }
+                    return acc;
+                }, {} as FindOptionsWhere<T>);
+
+                return this.entity.find({ where, relations });
+            }
+
             if (isObject(index)) {
                 const where = Object.fromEntries(
-                    Object.entries(index).map(([key, val]) => [
-                        key,
-                        isString(val) || isNumber(val) ? Like(`%${val}%`) : val,
-                    ]),
+                    Object.entries(index).map(([key, val]) => {
+                        if (Array.isArray(val)) return [key, In(val)];
+                        if (isString(val) || isNumber(val))
+                            return [key, Like(`%${val}%`)];
+                        return [key, val]; // fallback
+                    }),
                 );
+
                 return this.entity.find({
                     where: where as FindOptionsWhere<T>,
                     relations,
                 });
             }
 
-            if (
-                typeof index === 'string' &&
-                (isString(value) || isNumber(value))
-            ) {
+            if (typeof index === 'string') {
                 const where = {
-                    [index]: Like(`%${value}%`),
+                    [index]: Array.isArray(value)
+                        ? In(value)
+                        : Like(`%${value}%`),
                 } as FindOptionsWhere<T>;
+
                 return this.entity.find({ where, relations });
             }
 

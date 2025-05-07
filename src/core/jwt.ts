@@ -11,10 +11,12 @@ class JWT {
             throw new Error('JWT_SECRET_KEY is not defined');
         })();
 
-    private static expireIn: number = Common.env<number>(
-        'JWT_EXPIRE_IN',
-        86400,
-    );
+    private static expireIn: number = (() => {
+        const raw = Common.env('JWT_EXPIRE_IN', '86400');
+        const parsed = Number(raw);
+        if (isNaN(parsed)) throw new Error('JWT_EXPIRE_IN must be a number');
+        return parsed;
+    })();
 
     static sign<T extends JwtPayload>(
         payload: T,
@@ -26,12 +28,22 @@ class JWT {
         });
     }
 
-    static verify<T = any>(token: string): T | null {
+    static verify<T = any>(
+        token: string,
+    ): { status: boolean; result: T | string } {
         try {
-            return jwt.verify(token, this.secretKey) as T;
+            const decoded = jwt.verify(token, this.secretKey) as T;
+            return { status: true, result: decoded };
         } catch (err: any) {
-            Common.logger('warn', 'JWT', 'Token verification failed');
-            return null;
+            Common.logger(
+                'warn',
+                'JWT',
+                `Token verification failed: ${err.message}`,
+            );
+            return {
+                status: false,
+                result: `Token verification failed: ${err.message}`,
+            };
         }
     }
 
@@ -46,7 +58,11 @@ class JWT {
         try {
             return jwt.decode(token) as T;
         } catch (err: any) {
-            Common.logger('warn', 'JWT', 'Token decoding failed');
+            Common.logger(
+                'warn',
+                'JWT',
+                `Token decoding failed: ${err.message}`,
+            );
             return null;
         }
     }
